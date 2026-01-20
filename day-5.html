@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day-5  A Letter for you❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&family=Dancing+Script:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 50%, #fff0f3 100%);
+      overflow-x: hidden;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      color: #d4768c;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: #c45b73;
+      transform: translateX(-5px);
+    }
+
+    .content {
+      max-width: 700px;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .day-label {
+      font-size: 0.9rem;
+      color: #d4768c;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #c45b73;
+      margin-bottom: 40px;
+    }
+
+    .letter-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      text-align: left;
+    }
+
+    .letter-greeting {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #d4768c;
+      margin-bottom: 25px;
+    }
+
+    .letter-body {
+      font-size: 1.1rem;
+      line-height: 2;
+      color: #666;
+    }
+
+    .letter-body p {
+      margin-bottom: 20px;
+    }
+
+    .letter-signature {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      color: #d4768c;
+      text-align: right;
+      margin-top: 30px;
+    }
+
+    /* Locked State */
+    .locked {
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .locked-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .locked-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #d4768c;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2rem;
+      }
+
+      .letter-card {
+        padding: 30px 25px;
+      }
+
+      .letter-greeting {
+        font-size: 1.6rem;
+      }
+
+      .letter-body {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="hearts"></div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="container">
+    <div class="content" id="content">
+      <!-- Content will be loaded by JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    // ========== CONFIGURATION ==========
+    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
+    const PREVIEW_MODE = true;
+    
+    // Set your start date here (Year, Month (0-11), Day)
+    // Example: January 20, 2026 = new Date(2026, 0, 20)
+    const START_DATE = new Date(2026, 0, 20);
+    const DAY_NUMBER = 1;
+    // ===================================
+
+    function checkAccess() {
+      if (PREVIEW_MODE) return true;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const unlockDate = new Date(START_DATE);
+      unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
+      unlockDate.setHours(0, 0, 0, 0);
+      
+      return today >= unlockDate;
+    }
+
+    function showContent() {
+      const contentEl = document.getElementById('content');
+      
+      if (checkAccess()) {
+        contentEl.innerHTML = `
+          <p class="day-label">Day 1</p>
+          <h1 class="title">A Letter For You</h1>
+          
+          <div class="letter-card">
+            <p class="letter-greeting">My Dearest Love,</p>
+            
+            <div class="letter-body">
+              <p>Two years ago, tzadet shy haja f hyati.. nejma, 9amar, haja li dewwat hyati kamla w khellatni neish the best days of my life. Every moment since then has been a beautiful adventure that I wouldn't trade for anything in this universe.</p>
+              
+              <p>You are my sunshine on cloudy days, my calm in every storm, and my reason to smile even when things get tough. Thank you for being you – perfectly imperfect and absolutely wonderful.</p>
+              
+              <p>This week, I want to celebrate us, bghit nfreh bina, b dakshy li 9derna ndirouh bjouj w 9derna nweslou lih bjouj. Each day holds a little surprise, a piece of my heart that I'm giving to you. This is just the beginning of our journey together w mazal bzaf dyal lhajat li aneishouhoum bjouj nshaalah.</p>
+            
+              <p>I love you more than words could ever express, and if you ask me how much i love you, i would say kter mn koulshy w kter mn lbher w sema. I fall deeper in love with you every single day. And i which every single coming day witnesses your presence in my sides.</p>
+            </div>
+            
+            <p class="letter-signature">Forever Your petit poussin ❤️ </p>
+          </div>
+        `;
+      } else {
+        contentEl.innerHTML = `
+          <div class="letter-card locked">
+            <div class="locked-icon">🔒</div>
+            <p class="locked-message">Come back tomorrow ❤️</p>
+          </div>
+        `;
+      }
+    }
+
+    // Floating hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      
+      const size = Math.random() * 15 + 8;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 5 + 10;
+      const delay = Math.random() * 5;
+      
+      heart.style.left = left + '%';
+      heart.style.fontSize = size + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.5)`;
+      heart.style.animationDuration = duration + 's';
+      heart.style.animationDelay = delay + 's';
+      
+      document.getElementById('hearts').appendChild(heart);
+      
+      setTimeout(() => heart.remove(), (duration + delay) * 1000);
+    }
+
+    for (let i = 0; i < 10; i++) {
+      setTimeout(createHeart, i * 400);
+    }
+    setInterval(createHeart, 1200);
+
+    // Initialize
+    showContent();
+  </script>
+</body>
+</html>
