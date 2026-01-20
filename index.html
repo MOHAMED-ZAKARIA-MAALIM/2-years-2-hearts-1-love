@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> 2 years, 2 hearts & 1 love ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/img/bg.jpeg') center/cover no-repeat;
+      filter: blur(4px);
+      transform: scale(1.1);
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 182, 193, 0.7), rgba(255, 228, 225, 0.6));
+      z-index: -1;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      margin-bottom: 50px;
+      text-align: center;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: -40px;
+      margin-bottom: 50px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      animation: fadeInDown 1s ease-out 0.3s both;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      animation: fadeInUp 1s ease-out 0.5s both;
+    }
+
+    .day-btn {
+      display: block;
+      padding: 18px 50px;
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      color: #d4768c;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 50px;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      min-width: 280px;
+    }
+
+    .day-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(212, 118, 140, 0.3);
+      background: #fff;
+      color: #c45b73;
+    }
+
+    .day-btn:active {
+      transform: translateY(-1px);
+    }
+
+    /* Floating Hearts */
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) rotate(360deg);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2.5rem;
+      }
+
+      .day-btn {
+        padding: 15px 40px;
+        min-width: 240px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="overlay"></div>
+  <div class="hearts-container" id="hearts"></div>
+
+  <div class="container">
+    <h1 class="title">2 years,2 hearts & 1 love❤️ </h1>
+    <p class="subtitle">Happy 2nd Anniversary, Yasminati</p>
+    
+    <div class="buttons">
+      <a href="day-5.html" class="day-btn">Day-5  A Letter for you</a>
+      <a href="day-4.html" class="day-btn">Day-4  Songs for you</a>
+      <a href="day-3.html" class="day-btn">Day-3  Memories</a>
+      <a href="day-2.html" class="day-btn">Day-2  Why I Love You</a>
+      <a href="day-1.html" class="day-btn">Day-1  My Promise for you</a>
+    </div>
+  </div>
+
+  <script>
+    // Create floating hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      
+      const size = Math.random() * 20 + 10;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 5 + 8;
+      const delay = Math.random() * 5;
+      
+      heart.style.left = left + '%';
+      heart.style.fontSize = size + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.7)`;
+      heart.style.animationDuration = duration + 's';
+      heart.style.animationDelay = delay + 's';
+      
+      document.getElementById('hearts').appendChild(heart);
+      
+      setTimeout(() => {
+        heart.remove();
+      }, (duration + delay) * 1000);
+    }
+
+    // Initial hearts
+    for (let i = 0; i < 15; i++) {
+      setTimeout(createHeart, i * 300);
+    }
+
+    // Continuous hearts
+    setInterval(createHeart, 800);
+  </script>
+</body>
+</html>
