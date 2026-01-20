@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day-4 Songs for you❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 50%, #fff0f3 100%);
+      overflow-x: hidden;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      color: #d4768c;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: #c45b73;
+      transform: translateX(-5px);
+    }
+
+    .content {
+      max-width: 600px;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .day-label {
+      font-size: 0.9rem;
+      color: #d4768c;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #c45b73;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      color: #888;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    .music-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+    }
+
+    .playlist-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #c45b73;
+      margin-bottom: 25px;
+    }
+
+    .song-list {
+      list-style: none;
+      text-align: left;
+    }
+
+    .song-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .song-item.revealed {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .song-item.hidden {
+      display: none;
+    }
+
+    .song-item:hover {
+      background: rgba(212, 118, 140, 0.1);
+    }
+
+    .audio-player {
+      width: 100%;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .audio-player audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .now-playing {
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .now-playing-artist {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .reveal-btn {
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+    }
+
+    .reveal-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+    }
+
+    .reveal-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .all-revealed-message {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: linear-gradient(135deg, #fff5f5, #ffe4e8);
+      border-radius: 12px;
+      color: #c45b73;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .all-revealed-message.show {
+      display: block;
+    }
+
+    .song-number {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.85rem;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .song-info {
+      flex: 1;
+    }
+
+    .song-title {
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 3px;
+    }
+
+    .song-artist {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .song-note {
+      font-size: 0.8rem;
+      color: #d4768c;
+      font-style: italic;
+      margin-top: 5px;
+    }
+
+    .message {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(212, 118, 140, 0.1);
+      border-radius: 12px;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Locked State */
+    .locked {
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    .locked-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .locked-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #d4768c;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 2rem; }
+      .music-card { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="hearts"></div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="container">
+    <div class="content" id="content"></div>
+  </div>
+
+  <script>
+    // ========== CONFIGURATION ==========
+    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
+    const PREVIEW_MODE = false;
+    
+    const START_DATE = new Date(2026, 0, 20);
+    const DAY_NUMBER = 2;
+    // ===================================
+
+    function checkAccess() {
+      if (PREVIEW_MODE) return true;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const unlockDate = new Date(START_DATE);
+      unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
+      unlockDate.setHours(0, 0, 0, 0);
+      return today >= unlockDate;
+    }
+
+    // ========== SONGS DATA ==========
+    // Add your own songs here! Format: { title, artist, note, audioUrl (optional) }
+    const songs = [
+      { title: "Bali Maak", artist: "Stormy", note: "ezeltek west 1 million w neawd neazlek ta west 1 milliard.. bghit benti ykoun endha fhal einik w bghit weldi ykoun hustler fhal babah ", audioUrl: "/music/balimaak.mp3" },
+      { title: "Ana wiak", artist: "Aminux", note: "dehka dyalk katnessini hmoum eyami, nhezzk l sema w nbouss yeddik lehnina, njouma lil f sema ferhana bina", audioUrl: "/music/anawiak.mp3" },
+      { title: "Nedik l paris", artist: "Cheb Bilal", note: "nti eomri wnti hayati, nsmeh fik ma n9dershi, neashe9 fik aghir nti", audioUrl: "/music/nedikparis.mp3" },
+      { title: "Bab sima", artist: "Amir Eid ", note: "yeddi f yeddiha w eaynia eliha, samea dehketha w ehna b netfaraj", audioUrl: "/music/babsima.mp3" },
+      { title: "Megwani", artist: "Inkonnu & Asmaa", note: "kanshofu einik koula kanshouf njoum, kijerrouni endhoum", audioUrl: "/music/mgwani.mp3" }
+    ];
+    // ===================================
+
+    let currentRevealedIndex = 0;
+
+    function showContent() {
+      const contentEl = document.getElementById('content');
+      
+      if (checkAccess()) {
+        const songListHTML = songs.map((song, index) => `
+          <li class="song-item hidden" data-index="${index}">
+            <div class="song-number">${index + 1}</div>
+            <div class="song-info">
+              <div class="song-title">${song.title}</div>
+              <div class="song-artist">${song.artist}</div>
+              <div class="song-note">${song.note}</div>
+            </div>
+          </li>
+        `).join('');
+
+        contentEl.innerHTML = `
+          <p class="day-label">Day 2</p>
+          <h1 class="title">Our Playlist</h1>
+          <p class="subtitle">Songs that remind me of us</p>
+          
+          <div class="music-card">
+            <div class="audio-player" id="audioPlayer" style="display: none;">
+              <div class="now-playing" id="nowPlaying">Now Playing</div>
+              <div class="now-playing-artist" id="nowPlayingArtist"></div>
+              <audio id="audioElement" controls></audio>
+            </div>
+            
+            <h2 class="playlist-title">Songs For You</h2>
+            
+            <ul class="song-list" id="songList">
+              ${songListHTML}
+            </ul>
+            
+            <button class="reveal-btn" id="revealBtn" onclick="revealNextSong()">
+              Discover the first song
+            </button>
+            
+            <div class="all-revealed-message" id="finalMessage">
+              Each of these songs holds a piece of my heart. When you listen to them, know that I'm thinking of you always.
+            </div>
+          </div>
+        `;
+
+
+      } else {
+        contentEl.innerHTML = `
+          <div class="music-card locked">
+            <div class="locked-icon">🔒</div>
+            <p class="locked-message">Come back tomorrow</p>
+          </div>
+        `;
+      }
+    }
+
+    function revealNextSong() {
+      const songItems = document.querySelectorAll('.song-item');
+      const revealBtn = document.getElementById('revealBtn');
+      const finalMessage = document.getElementById('finalMessage');
+      const audioPlayer = document.getElementById('audioPlayer');
+      const audioElement = document.getElementById('audioElement');
+      const nowPlaying = document.getElementById('nowPlaying');
+      const nowPlayingArtist = document.getElementById('nowPlayingArtist');
+      
+      if (currentRevealedIndex < songItems.length) {
+        const currentSong = songItems[currentRevealedIndex];
+        const songData = songs[currentRevealedIndex];
+        
+        currentSong.classList.remove('hidden');
+        
+        // Trigger animation
+        setTimeout(() => {
+          currentSong.classList.add('revealed');
+        }, 50);
+        
+        // Play song if audio URL exists
+        if (songData.audioUrl) {
+          audioPlayer.style.display = 'block';
+          audioElement.src = songData.audioUrl;
+          nowPlaying.textContent = songData.title;
+          nowPlayingArtist.textContent = songData.artist;
+          audioElement.play().catch(() => {});
+        }
+        
+        currentRevealedIndex++;
+        
+        // Update button text
+        if (currentRevealedIndex < songItems.length) {
+          revealBtn.textContent = `Discover song ${currentRevealedIndex + 1}`;
+        } else {
+          revealBtn.style.display = 'none';
+          finalMessage.classList.add('show');
+        }
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 15 + 8) + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.5)`;
+      heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 15000);
+    }
+
+    for (let i = 0; i < 10; i++) setTimeout(createHeart, i * 400);
+    setInterval(createHeart, 1200);
+    showContent();
+  </script>
+</body>
+</html>
