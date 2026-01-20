@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 4 – Why I Love You ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 50%, #fff0f3 100%);
+      overflow-x: hidden;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 100px 20px 60px;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      color: #d4768c;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: #c45b73;
+      transform: translateX(-5px);
+    }
+
+    .content {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .day-label {
+      font-size: 0.9rem;
+      color: #d4768c;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #c45b73;
+      margin-bottom: 40px;
+    }
+
+    .reasons-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+    }
+
+    .reason-item {
+      display: flex;
+      align-items: flex-start;
+      text-align: left;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(212, 118, 140, 0.15);
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: slideIn 0.5s ease-out forwards;
+    }
+
+    .reason-item:last-child {
+      border-bottom: none;
+    }
+
+    .reason-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+
+    .reason-text {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .reason-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #c45b73;
+      margin-bottom: 5px;
+    }
+
+    .reason-description {
+      color: #777;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .reason-item:nth-child(1) { animation-delay: 0.1s; }
+    .reason-item:nth-child(2) { animation-delay: 0.2s; }
+    .reason-item:nth-child(3) { animation-delay: 0.3s; }
+    .reason-item:nth-child(4) { animation-delay: 0.4s; }
+    .reason-item:nth-child(5) { animation-delay: 0.5s; }
+    .reason-item:nth-child(6) { animation-delay: 0.6s; }
+    .reason-item:nth-child(7) { animation-delay: 0.7s; }
+    .reason-item:nth-child(8) { animation-delay: 0.8s; }
+    .reason-item:nth-child(9) { animation-delay: 0.9s; }
+    .reason-item:nth-child(10) { animation-delay: 1s; }
+
+    .footer-message {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(212, 118, 140, 0.1);
+      border-radius: 12px;
+      color: #c45b73;
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    /* Locked State */
+    .locked-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      text-align: center;
+    }
+
+    .locked-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .locked-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #d4768c;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 2rem; }
+      .reasons-container { padding: 25px; }
+      .container { padding-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="hearts"></div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="container">
+    <div class="content" id="content"></div>
+  </div>
+
+  <script>
+    // ========== CONFIGURATION ==========
+    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
+    const PREVIEW_MODE = false;
+    
+    const START_DATE = new Date(2026, 0, 20);
+    const DAY_NUMBER = 4;
+    // ===================================
+
+    function checkAccess() {
+      if (PREVIEW_MODE) return true;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const unlockDate = new Date(START_DATE);
+      unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
+      unlockDate.setHours(0, 0, 0, 0);
+      return today >= unlockDate;
+    }
+
+    function showContent() {
+      const contentEl = document.getElementById('content');
+      
+      if (checkAccess()) {
+        contentEl.innerHTML = `
+          <p class="day-label">Day 4</p>
+          <h1 class="title">Why I Love You</h1>
+          
+          <div class="reasons-container">
+            <div class="reason-item">
+              <div class="reason-number">1</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Smile</h3>
+                <p class="reason-description">The way your whole face lights up when you smile makes my heart skip a beat every single time.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">2</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Kindness</h3>
+                <p class="reason-description">The way you care for others, even strangers, shows me what a beautiful heart you have.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">3</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Laugh</h3>
+                <p class="reason-description">It's contagious and genuine. I love being the reason behind your laughter.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">4</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Strength</h3>
+                <p class="reason-description">How you face challenges head-on inspires me to be a better person every day.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">5</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Patience</h3>
+                <p class="reason-description">Thank you for being patient with me, even when I'm difficult to deal with.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">6</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Support</h3>
+                <p class="reason-description">You believe in me even when I don't believe in myself. That means everything.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">7</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Weirdness</h3>
+                <p class="reason-description">All your quirks and silly moments make you uniquely perfect for me.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">8</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Your Hugs</h3>
+                <p class="reason-description">Being in your arms feels like coming home. It's my favorite place in the world.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">9</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Celebrating my victories</h3>
+                <p class="reason-description">I love you is the way you celebrate my victories as if they were your own, always proud of me and always by my side.</p>
+              </div>
+            </div>
+            
+            <div class="reason-item">
+              <div class="reason-number">10</div>
+              <div class="reason-text">
+                <h3 class="reason-title">Everything</h3>
+                <p class="reason-description">I love you not just for who you are, but for who I become when I'm with you.</p>
+              </div>
+            </div>
+            
+            <div class="footer-message">
+              ...and a million more reasons that I'll spend the rest of my life discovering. And i will always love you more than i loved you the day before. Kanbghiikk hbibti❤️
+            </div>
+          </div>
+        `;
+      } else {
+        contentEl.innerHTML = `
+          <div class="locked-card">
+            <div class="locked-icon">🔒</div>
+            <p class="locked-message">Come back tomorrow ❤️</p>
+          </div>
+        `;
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 15 + 8) + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.5)`;
+      heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 15000);
+    }
+
+    for (let i = 0; i < 10; i++) setTimeout(createHeart, i * 400);
+    setInterval(createHeart, 1200);
+    showContent();
+  </script>
+</body>
+</html>
