@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 5 – My Promise ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&family=Dancing+Script:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 50%, #fff0f3 100%);
+      overflow-x: hidden;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      color: #d4768c;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: #c45b73;
+      transform: translateX(-5px);
+    }
+
+    .content {
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .day-label {
+      font-size: 0.9rem;
+      color: #d4768c;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #c45b73;
+      margin-bottom: 40px;
+    }
+
+    .promise-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 50px 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .promise-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #ffb6c1, #ff69b4, #ffb6c1);
+    }
+
+    .promise-intro {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      color: #d4768c;
+      margin-bottom: 30px;
+    }
+
+    .promises-list {
+      text-align: left;
+      margin-bottom: 30px;
+    }
+
+    .promise-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .promise-item:nth-child(1) { animation-delay: 0.2s; }
+    .promise-item:nth-child(2) { animation-delay: 0.4s; }
+    .promise-item:nth-child(3) { animation-delay: 0.6s; }
+    .promise-item:nth-child(4) { animation-delay: 0.8s; }
+    .promise-item:nth-child(5) { animation-delay: 1s; }
+    .promise-item:nth-child(6) { animation-delay: 1.2s; }
+
+    .promise-heart {
+      color: #ff69b4;
+      margin-right: 15px;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .promise-text {
+      color: #555;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .closing {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(212, 118, 140, 0.2);
+    }
+
+    .closing-text {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .signature {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #c45b73;
+    }
+
+    .anniversary-badge {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      border-radius: 50px;
+      color: white;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
+    }
+
+    /* Locked State */
+    .locked-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      text-align: center;
+    }
+
+    .locked-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .locked-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #d4768c;
+    }
+
+    .video-section {
+      margin-top: 40px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+    }
+
+    .video-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #c45b73;
+      margin-bottom: 20px;
+    }
+
+    .video-container {
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(212, 118, 140, 0.2);
+    }
+
+    .video-container video {
+      width: 100%;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 2rem; }
+      .promise-card { padding: 35px 25px; }
+      .promise-intro { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="hearts"></div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="container">
+    <div class="content" id="content"></div>
+  </div>
+
+  <script>
+    // ========== CONFIGURATION ==========
+    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
+    const PREVIEW_MODE = true;
+    
+    const START_DATE = new Date(2026, 0, 20);
+    const DAY_NUMBER = 5;
+    // ===================================
+
+    function checkAccess() {
+      if (PREVIEW_MODE) return true;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const unlockDate = new Date(START_DATE);
+      unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
+      unlockDate.setHours(0, 0, 0, 0);
+      return today >= unlockDate;
+    }
+
+    function showContent() {
+      const contentEl = document.getElementById('content');
+      
+      if (checkAccess()) {
+        contentEl.innerHTML = `
+          <p class="day-label">Day 5</p>
+          <h1 class="title">My Promise To You</h1>
+          
+          <div class="promise-card">
+            <p class="promise-intro">My Dearest Love,</p>
+            
+            <div class="promises-list">
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to love you unconditionally, through all the seasons of our lives, in moments of joy and in times of hardship.</p>
+              </div>
+              
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to be your biggest cheerleader, supporting your dreams and celebrating your victories as if they were my own.</p>
+              </div>
+              
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to always communicate with honesty and kindness, to listen with my whole heart, and to never let the sun set on our anger.</p>
+              </div>
+              
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to grow alongside you, to learn from our differences, and to choose us every single day.</p>
+              </div>
+              
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to keep the spark alive, to surprise you, to date you, and to never take our love for granted.</p>
+              </div>
+              
+              <div class="promise-item">
+                <span class="promise-heart">❤</span>
+                <p class="promise-text">I promise to hold your hand through life's adventures, to be your home, your safe place, and your forever person.</p>
+              </div>
+            </div>
+            
+            <div class="closing">
+              <p class="closing-text">
+                These past two years have been the most beautiful chapter of my life, and I can't wait to write the rest of our story together. You are my today and all of my tomorrows.
+              </p>
+              
+              <p class="signature">Forever & Always Your Petit poussin ❤</p>
+              
+              <div class="anniversary-badge">
+                Happy 2nd Anniversary
+              </div>
+            </div>
+          </div>
+          
+          <div class="video-section">
+            <p class="video-title">All My Kisses</p>
+            <div class="video-container">
+              <video controls>
+                <source src="videos/vid2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        `;
+      } else {
+        contentEl.innerHTML = `
+          <div class="locked-card">
+            <div class="locked-icon">🔒</div>
+            <p class="locked-message">Come back tomorrow ❤️</p>
+          </div>
+        `;
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 15 + 8) + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.5)`;
+      heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 15000);
+    }
+
+    for (let i = 0; i < 10; i++) setTimeout(createHeart, i * 400);
+    setInterval(createHeart, 1200);
+    showContent();
+  </script>
+</body>
+</html>
