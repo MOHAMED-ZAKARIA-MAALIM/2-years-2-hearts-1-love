@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 3 – Memories ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Lora', serif;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 50%, #fff0f3 100%);
+      overflow-x: hidden;
+    }
+
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .heart::before {
+      content: '❤';
+      font-size: inherit;
+      color: inherit;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 100px 20px 60px;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      color: #d4768c;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-link:hover {
+      color: #c45b73;
+      transform: translateX(-5px);
+    }
+
+    .content {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .day-label {
+      font-size: 0.9rem;
+      color: #d4768c;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #c45b73;
+      margin-bottom: 40px;
+    }
+
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .memory-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .memory-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(212, 118, 140, 0.25);
+    }
+
+    .memory-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+    }
+
+    .memory-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .final-message {
+      margin-top: 40px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+    }
+
+    .final-message p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #c45b73;
+      line-height: 1.8;
+    }
+
+    .memory-content {
+      padding: 25px;
+      text-align: left;
+    }
+
+    .memory-date {
+      font-size: 0.85rem;
+      color: #d4768c;
+      margin-bottom: 8px;
+    }
+
+    .memory-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    .memory-description {
+      color: #777;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Locked State */
+    .locked-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 60px 40px;
+      box-shadow: 0 10px 40px rgba(212, 118, 140, 0.15);
+      text-align: center;
+    }
+
+    .locked-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .locked-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: #d4768c;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .title { font-size: 2rem; }
+      .container { padding-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="hearts"></div>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="container">
+    <div class="content" id="content"></div>
+  </div>
+
+  <script>
+    // ========== CONFIGURATION ==========
+    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
+    const PREVIEW_MODE = false;
+    
+    const START_DATE = new Date(2026, 0, 20);
+    const DAY_NUMBER = 3;
+    // ===================================
+
+    function checkAccess() {
+      if (PREVIEW_MODE) return true;
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const unlockDate = new Date(START_DATE);
+      unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
+      unlockDate.setHours(0, 0, 0, 0);
+      return today >= unlockDate;
+    }
+
+    function showContent() {
+      const contentEl = document.getElementById('content');
+      
+      if (checkAccess()) {
+        contentEl.innerHTML = `
+          <p class="day-label">Day 3</p>
+          <h1 class="title">Our Memories</h1>
+          
+          <div class="memories-grid">
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/1st date.jpeg" alt="Memory 1"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 1</p>
+                <h3 class="memory-title">Our First Date</h3>
+                <p class="memory-description">I liked you, but that day and in the moment I saw your smile and knew who you really are, I knew you were special. That evening changed my life forever.</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/swimming.jpeg" alt="Memory 2"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 2</p>
+                <h3 class="memory-title">Our First swim together</h3>
+                <p class="memory-description">A simple memory of a simple actvity, but it means a lot to us and it made us so much happy.</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/rabat4.jpeg" alt="Memory 3"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 3</p>
+                <h3 class="memory-title">Rabat together</h3>
+                <p class="memory-description">I was missing you so much.It was the first time giving you flowers & the moment we met was one the most happiest moments of my life.</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/ftbl.jpeg" alt="Memory 4"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 4</p>
+                <h3 class="memory-title">playing football together</h3>
+                <p class="memory-description">We were alone playing, laughing, talking, singing, and watching sunrise in one of the best activities together</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/your.jpeg" alt="Memory 5"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 5</p>
+                <h3 class="memory-title">Your birthday</h3>
+                <p class="memory-description">the moment when we surprised you with your friends, I gave you flowers, and your smile and happiness made my heart full. Maymkensh shhel kent ferhan dak nhar</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/integration.jpeg" alt="Memory 6"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 6</p>
+                <h3 class="memory-title">Integration</h3>
+                <p class="memory-description">It was a beautiful period, the people, the atmosphere, the activities, the mood, ajwaa raaaaieaaaa</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/my.jpeg" alt="Memory 7"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 7</p>
+                <h3 class="memory-title">My birthday</h3>
+                <p class="memory-description">The happiest birthday of my life. You made the most special birthday and me unable to talk as much as i was happy.</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/forum2.jpeg" alt="Memory 8"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 8</p>
+                <h3 class="memory-title">Forum together</h3>
+                <p class="memory-description">We were just like a business couple. It was an amazing experience for learning new professionel things and being together in it.</p>
+              </div>
+            </div>
+            
+            <div class="memory-card">
+              <div class="memory-image"><img src="img/gala2.jpeg" alt="Memory 9"></div>
+              <div class="memory-content">
+                <p class="memory-date">Memory 9</p>
+                <h3 class="memory-title">Gala Together</h3>
+                <p class="memory-description">A77777, we danced, we laughed, we singed, we ate, it was simply an unforgettable night. </p>
+              </div>
+            </div>
+            
+            
+          
+          <div class="final-message">
+            <p>Thas was a recap or a best-of for our 2 years togheter. These memories are just the beginning of our story. Every moment with you is a treasure I hold close to my heart. Thank you for filling my life with so much love and happiness. I can't wait to create a thousand more memories with you❤️</p>
+          </div>
+        `;
+      } else {
+        contentEl.innerHTML = `
+          <div class="locked-card">
+            <div class="locked-icon">🔒</div>
+            <p class="locked-message">Come back tomorrow ❤️</p>
+          </div>
+        `;
+      }
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 15 + 8) + 'px';
+      heart.style.color = `rgba(255, ${Math.floor(Math.random() * 100 + 150)}, ${Math.floor(Math.random() * 100 + 180)}, 0.5)`;
+      heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 15000);
+    }
+
+    for (let i = 0; i < 10; i++) setTimeout(createHeart, i * 400);
+    setInterval(createHeart, 1200);
+    showContent();
+  </script>
+</body>
+</html>
