@@ -171,6 +171,30 @@
       font-size: 1.1rem;
     }
 
+    /* Poetic Text */
+    .poetic-text {
+      margin-top: 30px;
+      padding: 25px;
+      background: rgba(255, 230, 240, 0.4);
+      border-radius: 15px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #333;
+      text-align: center;
+      font-family: 'Lora', serif;
+    }
+
+    .poetic-text p {
+      margin-bottom: 15px;
+    }
+
+    .poetic-conclusion {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #c45b73;
+      margin-top: 20px;
+    }
+
     /* Locked State */
     .locked-card {
       background: rgba(255, 255, 255, 0.9);
@@ -217,27 +241,23 @@
 
   <script>
     // ========== CONFIGURATION ==========
-    // PREVIEW_MODE: Set to true to see all content, false to enable date locking
-    const PREVIEW_MODE = false;
-    
+    const PREVIEW_MODE = true; // set to false to enable date-lock
     const START_DATE = new Date(2026, 0, 20);
     const DAY_NUMBER = 4;
     // ===================================
 
     function checkAccess() {
       if (PREVIEW_MODE) return true;
-      
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setHours(0,0,0,0);
       const unlockDate = new Date(START_DATE);
       unlockDate.setDate(START_DATE.getDate() + (DAY_NUMBER - 1));
-      unlockDate.setHours(0, 0, 0, 0);
+      unlockDate.setHours(0,0,0,0);
       return today >= unlockDate;
     }
 
     function showContent() {
       const contentEl = document.getElementById('content');
-      
       if (checkAccess()) {
         contentEl.innerHTML = `
           <p class="day-label">Day 4</p>
@@ -325,7 +345,51 @@
             </div>
             
             <div class="footer-message">
-              ...and a million more reasons that I'll spend the rest of my life discovering. And i will always love you more than i loved you the day before. Kanbghiikk hbibti❤️
+              ...and a million more reasons that I'll spend the rest of my life discovering. And I will always love you more than I loved you the day before. Kanbghiikk hbibti❤️
+            </div>
+
+            <!-- Poetic Text Section -->
+            <div class="poetic-text">
+              <p>معكِ يلين قلبي ويضحك كطفلٍ لكِ،<br>
+              وأتعلّم أن الأمان صار اسمي معكِ.</p>
+
+              <p>ابتسامتكِ فجرٌ يشرق في داخلي لكِ،<br>
+              ضحكتكِ موسيقى تجعل أيامي أحلى معكِ.</p>
+
+              <p>نظراتكِ بحرٌ أختبئ فيه بلا خوفٍ لكِ،<br>
+              وحسكِ دفءٌ يعيد ترتيب روحي المرهقة معكِ.</p>
+
+              <p>طريقتكِ في معاملتي ليست عادية لكِ،<br>
+              هي حنانٌ يربّي قلبي كطفلٍ صغير معكِ.</p>
+
+              <p>كل سؤال، كل لمسة، كل اهتمام منكِ،<br>
+              يصنع سحرًا يجعل الحياة ألوانها أكثر معكِ.</p>
+
+              <p>معكِ يصبح التعب أخفّ والحزن أقلّ لكِ،<br>
+              حتى الصمت يصبح موسيقى حين تكونين بقربي لكِ.</p>
+
+              <p>وجودكِ يُحوّل كل لحظة بسيطة إلى ذكرى منكِ،<br>
+              وكأنكِ تقولين للعالم: الحياة جميلة، فقط لأنكِ معي.</p>
+
+              <p>وأمّا شعركِ المُجعَّد…<br>
+              فهو غيمة فرح تتلوّن بالحرية معكِ،<br>
+              تموّجاته أمواج من ضحك وحياة، وكل خصلة تحكي قصة منكِ.</p>
+
+              <p>هو جمالكِ، كيرلي، حرّ، عفوي… تمامًا مثلكِ،<br>
+              لا يُرتَّب ليُعجب، بل يُترك كما هو… ويُعشق معكِ.</p>
+
+              <p>وحين تلمسين يدي، أصير طفلاً صغيرًا لكِ،<br>
+              وحين تهمسين اسمي، أجد نفسي أعيش عالمًا كاملًا معكِ.</p>
+
+              <p>كل ما فيكِ يجعلني أقع في حبكِ أكثر لكِ،<br>
+              وجهكِ، عينيكِ، حضوركِ، قلبكِ، روحكِ… أحبكِ كلّكِ.</p>
+
+              <p>أحبكِ اليوم أكثر من أمس، وأقلّ من غدٍ لكِ،<br>
+              لأن حبي لكِ ينمو بلا حدود… ويزداد جمالًا معكِ.</p>
+
+              <p class="poetic-conclusion">
+                💖 معكِ كل لحظة تصبح قصيدة، وكل يوم معكِ هدية من السماء 💖
+              </p>
             </div>
           </div>
         `;
@@ -357,6 +421,7 @@
   </script>
 </body>
 </html>
+
 
 
 
