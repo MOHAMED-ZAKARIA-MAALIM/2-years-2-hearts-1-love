@@ -309,9 +309,13 @@
 
     const jourJBtn = document.getElementById('jourJBtn');
 
-    jourJBtn.style.display = 'block';
-setTimeout(()=>{ jourJBtn.classList.add('visible'); }, 500);
-createSparkles();
+    if(today.getTime() === JOUR_J_DATE.getTime()){
+  jourJBtn.style.display = 'block';
+  setTimeout(()=>{ jourJBtn.classList.add('visible'); }, 1500);
+  createSparkles();
+} else {
+  jourJBtn.style.display = 'none';
+}
 
     function createSparkles(){
       const sparkleContainer = document.createElement('div');
@@ -354,6 +358,7 @@ createSparkles();
   </script>
 </body>
 </html>
+
 
 
 
