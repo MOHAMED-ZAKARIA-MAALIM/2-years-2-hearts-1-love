@@ -701,7 +701,7 @@
       // Start background music when verses begin
       const backgroundMusic = document.getElementById('backgroundMusic');
       if (backgroundMusic) {
-        backgroundMusic.volume = 0.02;
+        backgroundMusic.volume = 0.04;
         backgroundMusic.currentTime = 0;
         backgroundMusic.play().catch((err) => console.log("[v0] Background music play failed:", err));
       }
@@ -727,29 +727,39 @@
         console.log("[v0] Playing verse", currentVerseIndex + 1, ":", verse.text);
 
         // Play audio
-        if (verse.audioUrl && audioElement) {
+        if (verse.audioUrl) {
           audioElement.src = verse.audioUrl;
+          const backgroundMusic = document.getElementById('backgroundMusic');
+          
+          // Lower background music volume while verse plays
+          if (backgroundMusic) {
+            backgroundMusic.volume = 0.01;
+          }
           
           audioElement.onended = () => {
-            console.log("[v0] Audio ended for verse", currentVerseIndex + 1);
+            console.log("[v0] Verse audio ended, moving to next");
+            // Restore background music volume after verse
+            if (backgroundMusic) {
+              backgroundMusic.volume = 0.1;
+            }
             currentVerseIndex++;
-            setTimeout(() => playNextVerse(), 500);
+            playNextVerse();
           };
-
-          audioElement.onerror = (error) => {
-            console.log("[v0] Audio error:", error, "- skipping verse");
+          audioElement.onerror = () => {
+            console.log("[v0] Audio error, skipping to next verse");
             currentVerseIndex++;
-            setTimeout(() => playNextVerse(), 500);
+            playNextVerse();
           };
-
           audioElement.play().catch((err) => {
-            console.log("[v0] Play failed:", err);
+            console.log("[v0] Audio play failed:", err);
             currentVerseIndex++;
-            setTimeout(() => playNextVerse(), 500);
+            playNextVerse();
           });
         } else {
-          currentVerseIndex++;
-          setTimeout(() => playNextVerse(), 3000);
+          setTimeout(() => {
+            currentVerseIndex++;
+            playNextVerse();
+          }, 3000);
         }
       } else {
         // All verses done
@@ -879,7 +889,7 @@
             </video>
           </div>
           <div class="celebration-content">
-            <p class="celebration-joy-text">Fall in love with you, again and again! 💕</p>
+            <p class="celebration-joy-text">Je t'aime plus que tout au monde! 💕</p>
           </div>
         </div>
       `;
@@ -1018,4 +1028,3 @@
   </script>
 </body>
 </html>
-
