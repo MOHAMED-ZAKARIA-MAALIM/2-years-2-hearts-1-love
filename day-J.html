@@ -1150,9 +1150,13 @@
   <script>
     // ========== CONFIGURATION ==========
     const JOUR_J_DATE = new Date(2026, 0, 25); // 25 January 2026
-    
+    <div id="verse" class="verse"></div>
+  <audio id="verseAudio" preload="auto"></audio>
+  <button id="startBtn">Commencer</button>
+
+  <script>
     const verses = [
-      { text: "Il y a eu un temps où les jours passaient sans laisser de trace.", audioUrl:"https://mohamed-zakaria-maalim.github.io/2-years-2-hearts-1-love/audio/verse1.mp3" },
+       { text: "Il y a eu un temps où les jours passaient sans laisser de trace.", audioUrl:"https://mohamed-zakaria-maalim.github.io/2-years-2-hearts-1-love/audio/verse1.mp3" },
       { text: "Je vivais, oui… mais sans vraiment comprendre pourquoi.", audioUrl:"audio/verse2.mp3" },
       { text: "Puis tu es arrivée.", audioUrl:"audio/verse3.mp3" },
       { text: "Sans bruit. Sans promesse.", audioUrl:"audio/verse4.mp3" },
@@ -1168,8 +1172,32 @@
       { text: "Ce site n’est pas un cadeau. C’est un fragment de mon cœur.", audioUrl:"audio/verse14.mp3" },
       { text: "Et cette histoire… ce n’est que le début de la nôtre.", audioUrl:"audio/verse15.mp3" }
     ];
+       const finalMessage = "KANBGHIK KTER MN KOULSHY";
+    const verseDiv = document.getElementById("verse");
+    const audio = document.getElementById("verseAudio");
+    const startBtn = document.getElementById("startBtn");
 
+    let index = 0;
 
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      playVerse();
+    });
+
+    function playVerse() {
+      if (index >= verses.length) return;
+
+      verseDiv.textContent = verses[index].text;
+      audio.src = verses[index].audio;
+      audio.play();
+
+      audio.onended = () => {
+        index++;
+        setTimeout(playVerse, 800);
+      };
+    }
+  </script>
+   
     const finalMessage = "KANBGHIK KTER MN KOULSHY";
     
 
