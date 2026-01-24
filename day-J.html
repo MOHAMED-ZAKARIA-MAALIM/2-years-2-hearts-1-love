@@ -1150,52 +1150,62 @@
   <script>
     // ========== CONFIGURATION ==========
     const JOUR_J_DATE = new Date(2026, 0, 25); // 25 January 2026
-    <div id="verse" class="verse"></div>
-  <audio id="verseAudio" preload="auto"></audio>
-  <button id="startBtn">Commencer</button>
 
   <script>
-    const verses = [
-       { text: "Il y a eu un temps où les jours passaient sans laisser de trace.", audioUrl:"https://mohamed-zakaria-maalim.github.io/2-years-2-hearts-1-love/audio/verse1.mp3" },
-      { text: "Je vivais, oui… mais sans vraiment comprendre pourquoi.", audioUrl:"audio/verse2.mp3" },
-      { text: "Puis tu es arrivée.", audioUrl:"audio/verse3.mp3" },
-      { text: "Sans bruit. Sans promesse.", audioUrl:"audio/verse4.mp3" },
-      { text: "Et pourtant, tout a commencé à changer.", audioUrl:"audio/verse5.mp3" },
-      { text: "Avec toi, le monde est devenu plus doux.", audioUrl:"audio/verse6.mp3" },
-      { text: "Les couleurs plus vives.", audioUrl:"audio/verse7.mp3" },
-      { text: "Même le silence avait un sens quand tu étais là.", audioUrl:"audio/verse8.mp3" },
-      { text: "Tu n’as pas seulement aimé mes réussites,", audioUrl:"audio/verse9.mp3" },
-      { text: "tu as célébré mes victoires comme si elles étaient les tiennes.", audioUrl:"audio/verse10.mp3" },
-      { text: "Et c’est là que j’ai compris : ce que je ressentais n’était pas juste de l’amour… c’était un foyer.", audioUrl:"audio/verse11.mp3" },
-      { text: "Aujourd’hui, après deux ans, je ne compte plus le temps en jours, mais en souvenirs avec toi.", audioUrl:"audio/verse12.mp3" },
-      { text: "Et si demain me fait parfois peur, je sais une chose : tant que ta main est dans la mienne, je n’ai rien à craindre.", audioUrl:"audio/verse13.mp3" },
-      { text: "Ce site n’est pas un cadeau. C’est un fragment de mon cœur.", audioUrl:"audio/verse14.mp3" },
-      { text: "Et cette histoire… ce n’est que le début de la nôtre.", audioUrl:"audio/verse15.mp3" }
-    ];
-       const finalMessage = "KANBGHIK KTER MN KOULSHY";
-    const verseDiv = document.getElementById("verse");
-    const audio = document.getElementById("verseAudio");
-    const startBtn = document.getElementById("startBtn");
+  const verses = [
+  { text: "Il y a eu un temps où les jours passaient sans laisser de trace.", audioUrl: "audio/verse1.mp3" },
+  { text: "Je vivais, oui… mais sans vraiment comprendre pourquoi.", audioUrl: "audio/verse2.mp3" },
+  { text: "Puis tu es arrivée.", audioUrl: "audio/verse3.mp3" },
+  { text: "Sans bruit. Sans promesse.", audioUrl: "audio/verse4.mp3" },
+  { text: "Et pourtant, tout a commencé à changer.", audioUrl: "audio/verse5.mp3" },
+  { text: "Avec toi, le monde est devenu plus doux.", audioUrl: "audio/verse6.mp3" },
+  { text: "Les couleurs plus vives.", audioUrl: "audio/verse7.mp3" },
+  { text: "Même le silence avait un sens quand tu étais là.", audioUrl: "audio/verse8.mp3" },
+  { text: "Tu n’as pas seulement aimé mes réussites,", audioUrl: "audio/verse9.mp3" },
+  { text: "tu as célébré mes victoires comme si elles étaient les tiennes.", audioUrl: "audio/verse10.mp3" },
+  { text: "Et c’est là que j’ai compris : ce que je ressentais n’était pas juste de l’amour… c’était un foyer.", audioUrl: "audio/verse11.mp3" },
+  { text: "Aujourd’hui, après deux ans, je ne compte plus le temps en jours, mais en souvenirs avec toi.", audioUrl: "audio/verse12.mp3" },
+  { text: "Et si demain me fait parfois peur, je sais une chose : tant que ta main est dans la mienne, je n’ai rien à craindre.", audioUrl: "audio/verse13.mp3" },
+  { text: "Ce site n’est pas un cadeau. C’est un fragment de mon cœur.", audioUrl: "audio/verse14.mp3" },
+  { text: "Et cette histoire… ce n’est que le début de la nôtre.", audioUrl: "audio/verse15.mp3" }
+];
 
-    let index = 0;
+const audio = document.getElementById("verseAudio");
+const verseElements = document.querySelectorAll(".verse");
 
-    startBtn.addEventListener("click", () => {
-      startBtn.style.display = "none";
-      playVerse();
-    });
+let currentVerseIndex = 0;
 
-    function playVerse() {
-      if (index >= verses.length) return;
+function playVerses() {
+  currentVerseIndex = 0;
+  playNextVerse();
+}
 
-      verseDiv.textContent = verses[index].text;
-      audio.src = verses[index].audio;
-      audio.play();
+function playNextVerse() {
+  if (currentVerseIndex >= verses.length) {
+    document.getElementById("finalMessage").textContent = "KANBGHIK KTER MN KOULSHY";
+    document.getElementById("finalMessage").classList.add("show");
+    document.getElementById("continueBtn").classList.add("show");
+    return;
+  }
 
-      audio.onended = () => {
-        index++;
-        setTimeout(playVerse, 800);
-      };
-    }
+  verseElements.forEach((el, i) => {
+    el.classList.remove("active", "past");
+    el.classList.add("visible");
+    if (i < currentVerseIndex) el.classList.add("past");
+  });
+
+  const currentEl = verseElements[currentVerseIndex];
+  currentEl.classList.add("active");
+
+  audio.src = verses[currentVerseIndex].audioUrl;
+  audio.play();
+
+  audio.onended = () => {
+    currentVerseIndex++;
+    setTimeout(playNextVerse, 600);
+  };
+}
+
   </script>
    
     const finalMessage = "KANBGHIK KTER MN KOULSHY";
